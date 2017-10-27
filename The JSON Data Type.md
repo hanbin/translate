@@ -22,41 +22,39 @@
 
 基于`JSON`格式，mysql提供了一套韩束来操作JSON值，比如创建，修改和查询。下面的讨论我们会给出一些关于这些操作的例子。要深入了解每个函数，请查看[Section 12.16, “JSON Functions”](https://dev.mysql.com/doc/refman/5.7/en/json-functions.html)。
 
-A set of spatial functions for operating on GeoJSON values is also available. See [Section 12.15.11, “Spatial GeoJSON Functions”](https://dev.mysql.com/doc/refman/5.7/en/spatial-geojson-functions.html).
-
 还可以使用一组用于操作GeoJSON值的空间函数。 参见 [Section 12.15.11, “Spatial GeoJSON Functions”](https://dev.mysql.com/doc/refman/5.7/en/spatial-geojson-functions.html)。
-
-`JSON` columns, like columns of other binary types, are not indexed directly; instead, you can create an index on a generated column that extracts a scalar value from the `JSON` column. See [Indexing a Generated Column to Provide a JSON Column Index](https://dev.mysql.com/doc/refman/5.7/en/create-table-secondary-indexes.html#json-column-indirect-index), for a detailed example.
 
 `JSON`字段，和其他的二进制类型一样，不能直接进行索引；相应的，你可以创建从`JSON`列中取出一个存量值的索引。更加详细的资料请参考 [Indexing a Generated Column to Provide a JSON Column Index](https://dev.mysql.com/doc/refman/5.7/en/create-table-secondary-indexes.html#json-column-indirect-index)。
 
-MySQL优化器还会在JSON表达式的虚拟列上查找合适的索引。
+MySQL优化器还会在JSON表达式的虚拟列上查找合适的索引。  
 
-MySQL NDB Cluster 7.5 (7.5.2 and later) supports `JSON` columns and MySQL JSON functions, including creation of an index on a column generated from a `JSON` column as a workaround for being unable to index a `JSON` column. A maximum of 3`JSON` columns per [`NDB`](https://dev.mysql.com/doc/refman/5.7/en/mysql-cluster.html) table is supported.
+MySQL NDB Cluster 7.5（7.5.2及更高版本）支持“JSON”列和MySQL的JSON函数，包括从`JSON`列生成的列中创建索引，作为无法对`JSON`列进行索引的解决方案。 每个[`NDB`]（https://dev.mysql.com/doc/refman/5.7/en/mysql-cluster.html） 表最多支持3个`JSON列。
 
-The next few sections provide basic information regarding the creation and manipulation of JSON values.
+接下来的一小段提供一些有关于创建和操作JSON的基本操作。
 
-### Creating JSON Values
+### 创建JSON
 
-A JSON array contains a list of values separated by commas and enclosed within `[` and `]` characters:
+一个JSON数组包括一组被逗号分隔、[开始，]结束的字符串：
 
 ```
 ["abc", 10, null, true, false]
 ```
 
 A JSON object contains a set of key-value pairs separated by commas and enclosed within `{` and `}` characters:
+一个JSON对象包括一组被逗号分隔、`{`开始，`}`结束的键值对：
 
 ```
 {"k1": "value", "k2": 10}
 ```
 
 As the examples illustrate, JSON arrays and objects can contain scalar values that are strings or numbers, the JSON null literal, or the JSON boolean true or false literals. Keys in JSON objects must be strings. Temporal (date, time, or datetime) scalar values are also permitted:
+如上面两个例子看到的，JSON数组和对象可以包括字符串、数字、null、以及true和false。但是JSON对象中的所有key一定是字符串。JSON中也可以包括时间格式（诸如日期、时间以及日期时间）：
 
 ```
 ["12:18:29.000000", "2015-07-29", "2015-07-29 12:18:29.000000"]
 ```
 
-Nesting is permitted within JSON array elements and JSON object key values:
+JSON数组元素和JSON对象中键值对可以嵌套：
 
 ```
 [99, {"id": "HK500", "cost": 75.99}, ["hot", "cold"]]
